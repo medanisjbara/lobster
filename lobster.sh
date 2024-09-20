@@ -5,9 +5,9 @@ LOBSTER_VERSION="4.3.3"
 ### General Variables ###
 config_file="$HOME/.config/lobster/lobster_config.sh"
 lobster_editor=${VISUAL:-${EDITOR}}
-tmp_dir="${TMPDIR:-/tmp}/lobster" && mkdir -p "$tmp_dir"
+tmp_dir="$(mktemp -d --suffix=lobster)"
 lobster_socket="${TMPDIR:-/tmp}/lobster.sock" # Used by mpv (check the play_video function)
-lobster_logfile="${TMPDIR:-/tmp}/lobster.log"
+lobster_logfile="$(mktemp --suffix=lobster.log)"
 applications="$HOME/.local/share/applications/lobster" # Used for external menus (for now just rofi)
 images_cache_dir="$tmp_dir/lobster-images"             # Used for storing downloaded images of movie covers
 
