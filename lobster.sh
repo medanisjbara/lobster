@@ -568,7 +568,7 @@ EOF
                 player_cmd="$player_cmd --force-media-title='$displayed_title' '$video_link'"
                 case "$(uname -s)" in
                     MINGW* | *Msys) player_cmd="$player_cmd --write-filename-in-watch-later-config --save-position-on-quit --quiet" ;;
-                    *) player_cmd="$player_cmd --watch-later-dir='$watchlater_dir' --write-filename-in-watch-later-config --save-position-on-quit --quiet" ;;
+                    *) player_cmd="$player_cmd --watch-later-directory='$watchlater_dir' --write-filename-in-watch-later-config --save-position-on-quit --quiet" ;;
                 esac
 
                 # Check if the system supports Unix domain sockets
