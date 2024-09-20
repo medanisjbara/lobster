@@ -301,7 +301,7 @@ EOF
     download_thumbnails() {
         echo "$1" >"$tmp_dir/image_links" # used for the discord rich presence thumbnail
         printf "%s\n" "$1" | while read -r cover_url id type title; do
-            cover_url=$(printf "%s" "$cover_url" | sed -E 's/\/[[:digit:]]+x[[:digit:]]+\//\/1000x1000\//')
+            cover_url=$(printf "%s" "$cover_url" | $sed -E 's/\/[[:digit:]]+x[[:digit:]]+\//\/1000x1000\//')
             curl -s -o "$images_cache_dir/  $title ($type)  $id.jpg" "$cover_url" &
             if [ "$use_external_menu" = "true" ]; then
                 entry="$tmp_dir/applications/$id.desktop"
@@ -523,7 +523,7 @@ EOF
             if command -v nc >/dev/null 2>&1 && [ -S "$lobster_socket" ] 2>/dev/null; then
                 position=$(echo '{ "command": ["get_property", "time-pos"] }' | nc -U "$lobster_socket" 2>/dev/null | head -1)
                 [ -z "$position" ] && break
-                position=$(printf "%s" "$position" | sed -nE "s@.*\"data\":([0-9]*)\..*@\1@p")
+                position=$(printf "%s" "$position" | $sed -nE "s@.*\"data\":([0-9]*)\..*@\1@p")
                 position=$(printf "%02d:%02d:%02d" $((position / 3600)) $((position % 3600 / 60)) $((position % 60)))
                 update_rich_presence "$(printf "%s / %s" "$position" "$total")" &
             else
@@ -557,7 +557,7 @@ EOF
                 fi
                 ;;
             vlc)
-                vlc_subs_links=$(printf "%s" "$subs_links" | sed 's/https\\:/https:/g; s/:\([^\/]\)/#\1/g')
+                vlc_subs_links=$(printf "%s" "$subs_links" | $sed 's/https\\:/https:/g; s/:\([^\/]\)/#\1/g')
                 vlc "$video_link" --meta-title "$displayed_title" --input-slave="$vlc_subs_links"
                 ;;
             mpv | mpv.exe)
@@ -622,9 +622,9 @@ EOF
         title="$(printf "%s" "$2" | tr -d ':/')"
         dir="${3}/${title}"
         # ik this is dumb idc
-        language=$(printf "%s" "$4" | sed -nE "s@.*\"file\":\"[^\"]*\".*\"label\":\"(.$subs_language)[,\"\ ].*@\1@p")
-        num_subs="$(printf "%s" "$subs_links" | sed 's/:\([^\/]\)/\n\\1/g' | wc -l)"
-        ffmpeg_subs_links=$(printf "%s" "$subs_links" | sed 's/:\([^\/]\)/\nh/g; s/\\:/:/g' | while read -r sub_link; do
+        language=$(printf "%s" "$4" | $sed -nE "s@.*\"file\":\"[^\"]*\".*\"label\":\"(.$subs_language)[,\"\ ].*@\1@p")
+        num_subs="$(printf "%s" "$subs_links" | $sed 's/:\([^\/]\)/\n\\1/g' | wc -l)"
+        ffmpeg_subs_links=$(printf "%s" "$subs_links" | $sed 's/:\([^\/]\)/\nh/g; s/\\:/:/g' | while read -r sub_link; do
             printf " -i %s" "$sub_link"
         done)
         sub_ops="$ffmpeg_subs_links -map 0:v -map 0:a"
