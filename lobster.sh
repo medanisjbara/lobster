@@ -565,7 +565,8 @@ EOF
                 player_cmd="$player"
                 [ -n "$resume_from" ] && player_cmd="$player_cmd --start='$resume_from'"
                 [ -n "$subs_links" ] && player_cmd="$player_cmd $subs_arg='$subs_links'"
-                player_cmd="$player_cmd --force-media-title='$displayed_title' '$video_link'"
+                escaped_displayed_title="$(echo "$displayed_title" | sed "s/'/'\\\\''/g")"
+                player_cmd="$player_cmd --force-media-title='$escaped_displayed_title' '$video_link'"
                 case "$(uname -s)" in
                     MINGW* | *Msys) player_cmd="$player_cmd --write-filename-in-watch-later-config --save-position-on-quit --quiet" ;;
                     *) player_cmd="$player_cmd --watch-later-directory='$watchlater_dir' --write-filename-in-watch-later-config --save-position-on-quit --quiet" ;;
